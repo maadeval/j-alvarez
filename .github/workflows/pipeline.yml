@@ -1,0 +1,28 @@
+name: test-workflow
+on: push
+
+jobs:
+  avoid_previus:
+    name: 🚧 Avoid Previous Works
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+  linter:
+    name: 💅 Check Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'npm'
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install ci
+      - name: Check linter
+        run: npm run lint
