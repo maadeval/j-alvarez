@@ -1,9 +1,13 @@
+import { supabaseClient } from '@/config/supabase_config'
 import { Product } from '../domain/Product.type'
 import { ProductRepository } from '../domain/ProductRepository.type'
 
 export class SupabaseProductRepository implements ProductRepository {
+  private readonly TABLE_NAME = 'product'
+
   async getAll() {
-    return Promise.resolve([])
+    const { data } = await supabaseClient.from(this.TABLE_NAME).select('*')
+    return Promise.resolve(data as Product[])
   }
 
   async getById(id: string) {
